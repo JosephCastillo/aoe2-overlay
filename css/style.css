@@ -27,6 +27,18 @@ body {
     left: 20px;
 }
 
+.civ {
+    display: flex;
+    flex-direction: row;   /* Alinea en fila */
+    align-items: center;   /* Centra verticalmente */
+    gap: 6px;              /* Espacio entre icono y texto */
+}
+
+.civ img {
+    width: 22px;   /* Tamaño de icono ajustable */
+    height: auto;
+}
+
 /* ------------------------------------------------------------------- */
 /* 1. ESTILO VERTICAL (TU VERSIÓN ORIGINAL DE 190PX) */
 /* ------------------------------------------------------------------- */
@@ -66,7 +78,7 @@ body {
 
 /* Nombres de Jugadores */
 .style-vertical #matchPlayers {
-    font-size: 0.8em; 
+    font-size: 1em; 
     font-weight: bold;
     color: var(--main-text-color); 
     font-style: normal; 
@@ -158,6 +170,32 @@ body {
 .style-vertical .scoreboard #losses{
     color: var(--failure-color);
 }
+
+
+/* Acomodo de jugadores y VS en vertical */
+.style-vertical #matchPlayers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px; /* separa las líneas */
+}
+
+.style-vertical .player-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-weight: bold;
+    font-size: 0.8em;
+    white-space: nowrap;
+}
+
+.style-vertical .vs-line {
+    font-size: 0.75em;
+    font-weight: bold;
+    color: var(--highlight-color);
+}
+
 
 /* ------------------------------------------------------------------- */
 /* 2. ESTILO HORIZONTAL (SOLUCIÓN FINAL DE ALINEACIÓN) */
@@ -299,6 +337,7 @@ body {
 .style-horizontal #losses {
     color: var(--failure-color);
 }
+
 
 /* Elementos ocultos */
 .style-horizontal #matchElos { display: none; }

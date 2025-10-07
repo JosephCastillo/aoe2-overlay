@@ -6,6 +6,8 @@
     <title>Overlay AOE2</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/overlay.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/7.2.3/css/flag-icons.min.css" />
+
 </head>
 
 <body>
@@ -18,35 +20,37 @@
 
                 <div id="matchCivs">
                     <div class="civ">
-                        <img id="playerCivImg">
+                        <img id="playerCivImg" class="civ-icon" alt="Civ jugador">
                         <span id="playerCivText"></span>
                     </div>
-                    <span>VS</span>
+                    <span class="vs-text">VS</span>
                     <div class="civ">
-                        <img id="opponentCivImg">
+                        <img id="opponentCivImg" class="civ-icon" alt="Civ oponente">
                         <span id="opponentCivText"></span>
                     </div>
                 </div>
+
                 <p id="matchPlayers">-</p>
-                <!-- Aquí se mostrará el rating o ELO de la partida -->
                 <p id="matchElos">Elo actual: -</p>
             </div>
+        </div>
 
-            <!-- Estado de conexión -->
-            <div id="status">Conectando al servidor...</div>
 
-            <!-- Marcador compacto con títulos -->
-            <div class="scoreboard">
-                <div class="score">
-                    <span class="score-title">Victorias</span>
-                    <span id="wins">0</span>
-                </div>
-                <div class="score">
-                    <span class="score-title">Derrotas</span>
-                    <span id="losses">0</span>
-                </div>
+        <!-- Estado de conexión -->
+        <div id="status">Conectando al servidor...</div>
+
+        <!-- Marcador compacto con títulos -->
+        <div class="scoreboard">
+            <div class="score">
+                <span class="score-title">Victorias</span>
+                <span id="wins">0</span>
+            </div>
+            <div class="score">
+                <span class="score-title">Derrotas</span>
+                <span id="losses">0</span>
             </div>
         </div>
+    </div>
     </div>
 </body>
 

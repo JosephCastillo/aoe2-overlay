@@ -167,30 +167,41 @@ function iniciarPartidaEnVivo(match) {
     const opponent = findOpponent(match);
 
     if (matchTitleEl) matchTitleEl.textContent = `⚔️ ${match.leaderboardName || 'Ladder'} on ${match.rms || 'Mapa Desconocido'}`;
-    if (matchPlayersEl) matchPlayersEl.textContent = `${mainPlayer.name} VS ${opponent?.name || "-"}`;
+    
+    // Nombres + banderas
+    if (matchPlayersEl) matchPlayersEl.innerHTML = `
+    <div class="player-line">
+        <span class="fi fi-${mainPlayer.country}"></span> ${mainPlayer.name}
+    </div>
+    <div class="vs-line">VS</div>
+    <div class="player-line">
+        ${opponent ? `<span class="fi fi-${opponent.country}"></span> ${opponent.name}` : "-"}
+    </div>
+`;
 
+    // Elo 
     const playerRating = mainPlayer.rating || "?";
     const opponentRating = opponent?.rating || "?";
-    if (matchElosEl) matchElosEl.textContent = `${playerRating} ⚔️ ${opponentRating}`;
+    if (matchElosEl) matchElosEl.innerHTML = `
+        <span class="fi fi-"></span> ${playerRating} 
+        ⚔️ 
+        ${opponent ? `<span class="fi fi-"></span> ${opponentRating}` : "-"}
+    `;
 
-    // Asegúrate de que las funciones getFlagUrl/getCivIconUrl existen y devuelven URLs válidas.
-    if (playerFlagEl) playerFlagEl.src = getFlagUrl(mainPlayer.country) || "";
+    // Civilizaciones
     if (playerCivImg) playerCivImg.src = getCivIconUrl(mainPlayer.civilization) || "";
     if (playerCivText) playerCivText.textContent = mainPlayer.civilization || "";
 
     if (opponent) {
-        if (opponentFlagEl) opponentFlagEl.src = getFlagUrl(opponent.country) || "";
         if (opponentCivImg) opponentCivImg.src = getCivIconUrl(opponent.civilization) || "";
         if (opponentCivText) opponentCivText.textContent = opponent.civilization || "";
     } else {
-        if (opponentFlagEl) opponentFlagEl.src = "";
         if (opponentCivImg) opponentCivImg.src = "";
         if (opponentCivText) opponentCivText.textContent = "-";
     }
 
     if (statusEl) statusEl.textContent = `🎮 Partida ${wins + losses + 1} en juego...`;
 }
-
 
 function finalizarPartida(match) {
     const resultado = getPlayerResult(match, profileId);
@@ -349,13 +360,14 @@ function limpiarUI() {
     if (matchElosEl) matchElosEl.textContent = "-";
 }
 
-// **Funciones de Utilería (implementa tus URLs aquí)**
-function getFlagUrl(countryCode) {
-    // Ejemplo: return `url/banderas/${countryCode}.png`;
-    return ''; 
-}
+
 
 function getCivIconUrl(civilizationName) {
-    // Ejemplo: return `url/civs/${civilizationName}.png`;
-    return '';
+    if (!civilizationName) return "";
+
+    // Normalizar: pasar a minúsculas y reemplazar espacios por nada
+    const fileName = civilizationName.toLowerCase().replace(/\s+/g, "");
+
+    return `https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/master/img/Civs/${fileName}.png`;
 }
+
