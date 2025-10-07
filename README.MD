@@ -48,12 +48,12 @@ Ejemplo:
 ## 📸 Ejemplos visuales
 
 - **Esperando partida:**  
-  ![En espera](https://prnt.sc/rnt0bzwt4o5A)
-  ![En espera](https://prnt.sc/AuoKLVpvLCzK)
+  ![En espera](img/Esperando_partida_h.png)
+  ![En espera](img/Esperando_partida_v.png)
 
 - **En partida activa:**  
-  ![En partida](https://prnt.sc/I_HAVydfxZXp)
-  ![En partida](https://prnt.sc/H0zEYiOJVUVW)
+  ![En partida](img/overlay_h.png)
+  ![En partida](img/overlay_v.png)
 
 
 ---
