@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generador de Enlace OBS</title>
+    <style>
+        /* ... [Mantén los estilos de tu config.html aquí para que se vea bien] ... */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #333;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+        }
+        h2 { margin-top: 0; color: #f7a040; }
+        p { font-size: 0.9em; color: #ccc; }
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+            background-color: #444; /* Fondo oscuro para los campos */
+            color: white;
+        }
+        select {
+            appearance: none; /* Elimina el estilo nativo en algunos navegadores */
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-24.8%200l-88.8%2088.8L69.4%2069.4a17.6%2017.6%200%200%200-24.8%2024.8l100%20100a17.6%2017.6%200%200%200%2024.8%200l100-100a17.6%2017.6%200%200%200%200-24.8z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 10px top 50%;
+            background-size: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.2s;
+        }
+        button:hover { background-color: #388E3C; }
+        #resultArea { margin-top: 20px; border-top: 1px solid #444; padding-top: 20px; }
+        #obsUrlDisplay {
+            background: #222;
+            color: #00FF00;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 0.9em;
+            word-break: break-all;
+            text-align: left;
+        }
+        #copyButton { background-color: #007bff; }
+        #copyButton:hover { background-color: #0056b3; }
+        /* Nuevos estilos */
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #ccc;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="profileForm">
+            <h2>Generador de Enlace OBS</h2>
+            <p>Configura tu ID y selecciona el diseño del overlay.</p>
+            
+            <label for="profileIdInput">AoE2 Recs Profile ID:</label>
+            <input type="number" id="profileIdInput" placeholder="Ej: 618731" required>
+
+            <label for="styleSelector">Selecciona el Diseño:</label>
+            <select id="styleSelector">
+                <option value="horizontal">Barra Horizontal (Ideal para el borde)</option>
+                <option value="vertical">Vertical (Ideal para un lateral)</option>
+            </select>
+
+            <button type="submit">Generar URL</button>
+        </form>
+
+        <div id="resultArea" style="display: none;">
+            <h2>✅ Enlace Generado</h2>
+            <p>Copia el siguiente URL y pégalo en OBS. Asegúrate de configurar el tamaño correcto.</p>
+            <div id="obsUrlDisplay"></div>
+            <button id="copyButton">Copiar URL al Portapapeles</button>
+        </div>
+    </div>
+
+    <script>
+        const profileForm = document.getElementById('profileForm');
+        const profileIdInput = document.getElementById('profileIdInput');
+        const styleSelector = document.getElementById('styleSelector');
+        const resultArea = document.getElementById('resultArea');
+        const obsUrlDisplay = document.getElementById('obsUrlDisplay');
+        const copyButton = document.getElementById('copyButton');
+
+        profileForm.onsubmit = (e) => {
+            e.preventDefault();
+            const id = parseInt(profileIdInput.value);
+            const style = styleSelector.value;
+
+            if (id && !isNaN(id) && style) {
+                
+                // Obtenemos la URL del archivo generador y reemplazamos 'config.html' por 'index.html'
+                const baseUrl = window.location.href.replace('config.html', 'index.html').split('?')[0];
+                
+                // Creamos el URL final con AMBOS parámetros
+                const obsUrl = `${baseUrl}?profileId=${id}&style=${style}`;
+
+                // Mostramos el resultado
+                obsUrlDisplay.textContent = obsUrl;
+                resultArea.style.display = 'block';
+
+                // Mostrar una nota sobre el tamaño de OBS
+                const sizeNote = style === 'horizontal' 
+                    ? 'Configura el navegador de OBS a **1920x60**.' 
+                    : 'Configura el navegador de OBS a **300x500**.';
+                document.getElementById('resultArea').querySelector('p').innerHTML = 
+                    `Copia el siguiente URL y pégalo en OBS. **¡Importante!** ${sizeNote}`;
+
+
+                // Configurar el botón de copiar
+                copyButton.onclick = async () => {
+                    try {
+                        await navigator.clipboard.writeText(obsUrl);
+                        copyButton.textContent = "¡Copiado!";
+                        setTimeout(() => copyButton.textContent = "Copiar URL al Portapapeles", 1500);
+                    } catch (err) {
+                        alert('Error al copiar automáticamente. Por favor, copia el texto manualmente.');
+                    }
+                };
+
+            } else {
+                alert('Por favor, ingresa un ID de perfil válido.');
+            }
+        };
+    </script>
+</body>
+</html>
