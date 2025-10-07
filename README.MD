@@ -17,7 +17,7 @@ Está pensado para **streamers** o jugadores que quieran mostrar sus resultados 
 1. Busca tu **profile_id** de Age of Empires II (es tu número único de jugador).  
 2. 1. Abre el generador de enlaces:
 
-[text](https://josephcastillo.github.io/aoe2-overlay/config.html)
+[Abrir](https://josephcastillo.github.io/aoe2-overlay/config.html)
 
 2. 2. En el formulario:  
    - Ingresa tu **AoE2 Recs Profile ID** (tu número de jugador).  
@@ -27,7 +27,7 @@ Está pensado para **streamers** o jugadores que quieran mostrar sus resultados 
 
 Ejemplo:  
 
-   ![Generador de enlace](https://prnt.sc/rTW9yhmSnb1D)
+   ![Generador de enlace](img/overlay_ge.png)
 
 3. Copia el enlace generado y pégalo en OBS como un **Navegador**.  
    - Ajusta el tamaño:  
