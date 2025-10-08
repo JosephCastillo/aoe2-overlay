@@ -7,6 +7,7 @@ const profileId = parseInt(urlParams.get("profileId"));
 // NUEVA LÍNEA: Obtener el parámetro de estilo
 const overlayStyle = urlParams.get("style") || 'horizontal'; // Default a horizontal
 
+
 let wins = 0;
 let losses = 0;
 let enPartida = false;
@@ -161,32 +162,37 @@ function iniciarPartidaEnVivo(match) {
     enPartida = true;
     partidaActualId = match.id;
 
+    const matchInfoEl = document.getElementById("matchInfo");
+    if (matchInfoEl) matchInfoEl.classList.remove("hidden"); // Mostrar sección
+
     const mainPlayer = findPlayer(match);
     if (!mainPlayer) return;
-
     const opponent = findOpponent(match);
 
+    // Título
     if (matchTitleEl) matchTitleEl.textContent = `⚔️ ${match.leaderboardName || 'Ladder'} on ${match.rms || 'Mapa Desconocido'}`;
-    
-    // Nombres + banderas
-    if (matchPlayersEl) matchPlayersEl.innerHTML = `
-    <div class="player-line">
-        <span class="fi fi-${mainPlayer.country}"></span> ${mainPlayer.name}
-    </div>
-    <div class="vs-line">VS</div>
-    <div class="player-line">
-        ${opponent ? `<span class="fi fi-${opponent.country}"></span> ${opponent.name}` : "-"}
-    </div>
-`;
 
-    // Elo 
+    // Jugadores + banderas
+    if (matchPlayersEl) matchPlayersEl.innerHTML = `
+        <div class="player-line">
+            <span class="fi fi-${mainPlayer.country}"></span> ${mainPlayer.name}
+        </div>
+        <div class="vs-line">VS</div>
+        <div class="player-line">
+            ${opponent ? `<span class="fi fi-${opponent.country}"></span> ${opponent.name}` : "-"}
+        </div>
+    `;
+
+    // ELO
     const playerRating = mainPlayer.rating || "?";
     const opponentRating = opponent?.rating || "?";
-    if (matchElosEl) matchElosEl.innerHTML = `
-        <span class="fi fi-"></span> ${playerRating} 
-        ⚔️ 
-        ${opponent ? `<span class="fi fi-"></span> ${opponentRating}` : "-"}
-    `;
+    if (matchElosEl) {
+        matchElosEl.innerHTML = `
+            <span class="fi fi-"></span> ${playerRating} 
+            ⚔️ 
+            ${opponent ? `<span class="fi fi-"></span> ${opponentRating}` : "-"}
+        `;
+    }
 
     // Civilizaciones
     if (playerCivImg) playerCivImg.src = getCivIconUrl(mainPlayer.civilization) || "";
@@ -200,8 +206,18 @@ function iniciarPartidaEnVivo(match) {
         if (opponentCivText) opponentCivText.textContent = "-";
     }
 
+    // Forzar display de ELO y spans de civ en horizontal
+    if (overlayStyle === 'horizontal') {
+        if (matchElosEl) matchElosEl.style.display = "flex";
+        const civSpans = document.querySelectorAll("#matchCivs span");
+        civSpans.forEach(span => span.style.display = "inline");
+    }
+
     if (statusEl) statusEl.textContent = `🎮 Partida ${wins + losses + 1} en juego...`;
+
+    animarInicioPartida();
 }
+
 
 function finalizarPartida(match) {
     const resultado = getPlayerResult(match, profileId);
@@ -223,6 +239,8 @@ function finalizarPartida(match) {
     partidaActualId = null;
 
     setTimeout(limpiarUI, 4000);
+
+    animarFinPartida(resultado);
 }
 
 
@@ -348,18 +366,65 @@ function animarContador(el) {
 }
 
 function limpiarUI() {
+    const matchInfoEl = document.getElementById("matchInfo");
+    if (matchInfoEl) matchInfoEl.classList.add("hidden"); // Oculta toda la sección
+    
+    // Resetear texto de partida y jugadores
     if (matchTitleEl) matchTitleEl.textContent = "⚔️ Esperando partida...";
     if (matchPlayersEl) matchPlayersEl.textContent = "-";
 
+    // Resetear banderas
     if (playerFlagEl) playerFlagEl.src = "";
     if (opponentFlagEl) opponentFlagEl.src = "";
+
+    // Resetear civilizaciones
     if (playerCivImg) playerCivImg.src = "";
     if (playerCivText) playerCivText.textContent = "-";
     if (opponentCivImg) opponentCivImg.src = "";
     if (opponentCivText) opponentCivText.textContent = "-";
+
+    // Resetear ELO
     if (matchElosEl) matchElosEl.textContent = "-";
+
+    // Si es horizontal, ocultar spans de civ y ELO que CSS oculta
+    if (overlayStyle === 'horizontal') {
+        if (matchElosEl) matchElosEl.style.display = "none";
+        const civSpans = document.querySelectorAll("#matchCivs span");
+        civSpans.forEach(span => span.style.display = "none");
+    }
 }
 
+
+// -------------------------------------------------------------
+// FUNCIONES DE ANIMACIÓN
+// -------------------------------------------------------------
+
+function animarInicioPartida() {
+    if (!mainOverlayEl) return;
+
+    mainOverlayEl.style.opacity = 0;
+    mainOverlayEl.style.transform = "scale(0.8)";
+    mainOverlayEl.style.transition = "all 0.5s ease-out";
+
+    requestAnimationFrame(() => {
+        mainOverlayEl.style.opacity = 1;
+        mainOverlayEl.style.transform = "scale(1)";
+    });
+}
+
+function animarFinPartida(resultado) {
+    const el = resultado ? winsEl : lossesEl;
+    if (!el) return;
+
+    el.style.transition = "all 0.6s ease";
+    el.style.transform = "scale(1.5)";
+    el.style.color = resultado ? "#FFD700" : "#FF4500"; // dorado vs rojo llamativo
+
+    setTimeout(() => {
+        el.style.transform = "scale(1)";
+        el.style.color = resultado ? "var(--success-color)" : "var(--failure-color)";
+    }, 600);
+}
 
 
 function getCivIconUrl(civilizationName) {

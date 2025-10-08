@@ -6,13 +6,13 @@
     --main-text-color: #ece8e8;
     --highlight-color: #cccbcb;
     --font-family: 'Arial', sans-serif;
-    --border-radius: 5px; 
+    --border-radius: 5px;
     --success-color: #4CAF50;
     --failure-color: #F44336;
 }
 
 body {
-    background-color: rgba(0, 0, 0, 0); 
+    background-color: rgba(0, 0, 0, 0);
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -29,20 +29,29 @@ body {
 
 .civ {
     display: flex;
-    flex-direction: row;   /* Alinea en fila */
-    align-items: center;   /* Centra verticalmente */
-    gap: 6px;              /* Espacio entre icono y texto */
+    flex-direction: row;
+    /* Alinea en fila */
+    align-items: center;
+    /* Centra verticalmente */
+    gap: 6px;
+    /* Espacio entre icono y texto */
 }
 
 .civ img {
-    width: 22px;   /* Tamaño de icono ajustable */
+    width: 22px;
+    /* Tamaño de icono ajustable */
     height: auto;
 }
+
+
 
 /* ------------------------------------------------------------------- */
 /* 1. ESTILO VERTICAL (TU VERSIÓN ORIGINAL DE 190PX) */
 /* ------------------------------------------------------------------- */
 /* (Este bloque contiene TODO tu código de estilo vertical y NO se ha modificado) */
+.style-vertical .hidden {
+    display: none;
+}
 
 .style-vertical {
     width: 190px;
@@ -54,20 +63,20 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0px;
-    height: auto; 
+    height: auto;
 }
 
 /* Contenedor de Información de Partida */
 .style-vertical #matchInfo {
-    display: flex;
+    /*display: flex;*/
     flex-direction: column;
-    gap: 0; 
+    gap: 0;
 }
 
 /* Título de la partida */
 .style-vertical #matchTitle {
     font-size: 0.7em;
-    font-weight: bold; 
+    font-weight: bold;
     color: var(--highlight-color);
     margin: 0;
     padding-bottom: 2px;
@@ -78,10 +87,10 @@ body {
 
 /* Nombres de Jugadores */
 .style-vertical #matchPlayers {
-    font-size: 1em; 
+    font-size: 1em;
     font-weight: bold;
-    color: var(--main-text-color); 
-    font-style: normal; 
+    color: var(--main-text-color);
+    font-style: normal;
     margin: 3px 0 0 0;
     padding: 0 0 1px 0;
     line-height: 1.1;
@@ -90,12 +99,12 @@ body {
 
 /* Civilizaciones y VS */
 .style-vertical #matchCivs {
-    order: 0; 
+    order: 0;
     display: flex;
     align-items: center;
     justify-content: space-around;
     padding: 1px 0 1px 0;
-    
+
 }
 
 
@@ -107,16 +116,16 @@ body {
     gap: 0px;
 }
 
-.style-vertical #matchCivs > span:not(.civ) {
+.style-vertical #matchCivs>span:not(.civ) {
     font-weight: bold;
     font-size: 0.8em;
     color: rgba(255, 255, 255, 0.5);
-    padding: 0 4px; 
+    padding: 0 4px;
 }
 
 /* Imagen de la Civilización */
 .style-vertical .civ img {
-    width: 26px; 
+    width: 26px;
     height: auto;
     border: none;
     margin-bottom: 1px;
@@ -126,7 +135,7 @@ body {
 .style-vertical .civ span {
     font-weight: normal;
     font-size: 0.7em;
-    line-height: 1; 
+    line-height: 1;
 }
 
 /* ELO / Rating */
@@ -141,11 +150,11 @@ body {
 }
 
 .style-vertical #matchElos::before {
-    content: "Rating: "; 
+    content: "Rating: ";
     color: rgba(255, 255, 255, 0.7);
     font-weight: normal;
     font-size: 0.85em;
-    margin-right: 4px; 
+    margin-right: 4px;
 }
 
 /* Estado de Conexión/Partida */
@@ -161,13 +170,15 @@ body {
     font-size: .8em;
     display: flex;
     justify-content: space-around;
-    padding-top: 4px; 
+    padding-top: 4px;
     padding-bottom: 3px;
 }
-.style-vertical .scoreboard #wins{
+
+.style-vertical .scoreboard #wins {
     color: var(--success-color);
 }
-.style-vertical .scoreboard #losses{
+
+.style-vertical .scoreboard #losses {
     color: var(--failure-color);
 }
 
@@ -177,7 +188,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px; /* separa las líneas */
+    gap: 4px;
+    /* separa las líneas */
 }
 
 .style-vertical .player-line {
@@ -205,22 +217,24 @@ body {
 .style-horizontal {
     /* Contenedor principal: Mantiene la forma y el espaciado de los bordes */
     display: flex;
-    align-items: center; /* CLAVE: Centrado vertical de la barra */
-    justify-content: space-between; 
-    
+    align-items: center;
+    /* CLAVE: Centrado vertical de la barra */
+    justify-content: space-between;
+
     background-color: rgba(0, 0, 0, 0.70);
     border-top: 3px solid rgba(231, 190, 7, 0.918);
     border-radius: var(--border-radius);
-    
-    height: 80px; 
-    padding: 0 20px; /* Suficiente espacio en los bordes laterales */
-    
-    width: max-content; 
-    max-width: 1500px; 
-    
+
+    height: 80px;
+    padding: 0 20px;
+    /* Suficiente espacio en los bordes laterales */
+
+    width: max-content;
+    max-width: 1500px;
+
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     font-size: 0.9em;
-    position: static !important; 
+    position: static !important;
     margin: 10px 10px;
 }
 
@@ -229,13 +243,14 @@ body {
     /* Resetea cualquier margin/padding que arrastre del modo vertical */
     margin: 0;
     padding: 0;
-    padding-bottom: 3px; 
-    
+    padding-bottom: 3px;
+
     display: flex;
     align-items: center;
-    gap: 15px; /* Espacio entre las 3 secciones principales de la izquierda */
+    gap: 15px;
+    /* Espacio entre las 3 secciones principales de la izquierda */
 
-    padding-right: 15px; 
+    padding-right: 15px;
     order: 1;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -245,15 +260,15 @@ body {
     /* CLAVE: Resetea todos los espaciados heredados */
     margin: 0;
     border: none;
-    line-height: 1.2; 
-    
+    line-height: 1.2;
+
     font-size: 1em;
     font-weight: bold;
     color: var(--highlight-color);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 250px; 
+    max-width: 250px;
     padding: 3px 0;
 }
 
@@ -262,12 +277,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0; /* Resetea margin vertical */
+    margin: 0;
+    /* Resetea margin vertical */
     padding: 0;
     gap: 8px;
 }
 
-.style-horizontal #matchCivs > span:not(.civ) {
+.style-horizontal #matchCivs>span:not(.civ) {
     line-height: 1.2;
 }
 
@@ -276,16 +292,17 @@ body {
     /* CLAVE: Resetea y alinea el texto del jugador */
     margin: 0;
     padding: 0;
-    line-height: 1.2; 
-    
+    line-height: 1.2;
+
     font-size: 1em;
     font-weight: bold;
     color: var(--main-text-color);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 200px; /* Aumentamos el espacio para los nombres */
-    order: 10; 
+    max-width: 200px;
+    /* Aumentamos el espacio para los nombres */
+    order: 10;
 }
 
 
@@ -293,7 +310,8 @@ body {
 .style-horizontal #status {
     /* CLAVE: Resetea margin vertical y asegura la alineación */
     margin: 0;
-    padding: 0 20px; /* margin-right */
+    padding: 0 20px;
+    /* margin-right */
     line-height: 1.2;
     font-size: 0.85em;
     color: #aaa;
@@ -307,13 +325,14 @@ body {
     order: 3;
     margin: 0;
     display: flex;
-    align-items: center; /* Alineación al centro para que todo el bloque V/D esté centrado */
+    align-items: center;
+    /* Alineación al centro para que todo el bloque V/D esté centrado */
     justify-content: center;
     padding: 4px 10px;
     border-radius: 4px;
     gap: 12px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    
+
 }
 
 /* Estilos internos del Marcador */
@@ -322,24 +341,36 @@ body {
     display: flex;
     flex-direction: column;
 }
+
 .style-horizontal .score-title {
     font-size: 0.65em;
     line-height: 1;
-    margin-bottom: 0px; 
+    margin-bottom: 0px;
 }
+
 .style-horizontal .score-value {
     font-size: 1.4em;
     line-height: 1;
 }
+
 .style-horizontal #wins {
     color: var(--success-color);
 }
+
 .style-horizontal #losses {
     color: var(--failure-color);
 }
 
 
 /* Elementos ocultos */
-.style-horizontal #matchElos { display: none; }
-.style-horizontal .civ span { display: none; }
-.style-horizontal #matchCivs  span {display: none;}
+.style-horizontal #matchElos {
+    display: none;
+}
+
+.style-horizontal .civ span {
+    display: none;
+}
+
+.style-horizontal #matchCivs span {
+    display: none;
+}
