@@ -118,13 +118,13 @@ function handleSocketMessage(msg) {
             if (enPartida && liveMatch.id === partidaActualId) return;
             iniciarPartidaEnVivo(liveMatch);
 
-        // Caso: partida terminada
+            // Caso: partida terminada
         } else if (liveMatch && liveMatch.status === 'complete' && enPartida) {
             if (liveMatch.id === partidaActualId) {
                 finalizarPartida(liveMatch);
             }
 
-        // 🚨 NUEVO: Caso en espera (liveMatch null o no en curso)
+            // 🚨 NUEVO: Caso en espera (liveMatch null o no en curso)
         } else if (!liveMatch || liveMatch.status !== 'ongoing') {
             enPartida = false;
             partidaActualId = null;
@@ -187,11 +187,7 @@ function iniciarPartidaEnVivo(match) {
     const playerRating = mainPlayer.rating || "?";
     const opponentRating = opponent?.rating || "?";
     if (matchElosEl) {
-        matchElosEl.innerHTML = `
-            <span class="fi fi-"></span> ${playerRating} 
-            ⚔️ 
-            ${opponent ? `<span class="fi fi-"></span> ${opponentRating}` : "-"}
-        `;
+        matchElosEl.innerHTML = `<span class="rated">${playerRating}</span>  ⚔️ ${opponent ? `<span class="rated"> ${opponentRating}</span>` : "-"}`;
     }
 
     // Civilizaciones
@@ -220,7 +216,12 @@ function iniciarPartidaEnVivo(match) {
 
 
 function finalizarPartida(match) {
+
+    console.log("🔔 FINALIZANDO PARTIDA:", match);
+
     const resultado = getPlayerResult(match, profileId);
+    console.log("Resultado detectado:", resultado);
+
 
     if (resultado === true) {
         wins++;
@@ -240,7 +241,13 @@ function finalizarPartida(match) {
 
     setTimeout(limpiarUI, 4000);
 
-    animarFinPartida(resultado);
+
+    animarFinPartidaGlobal(resultado);
+    setTimeout(() => {
+        console.log("⏱️ Lanzando animarFinPartida...");
+        animarFinPartida(resultado);
+    }, 4000);
+
 }
 
 
@@ -281,6 +288,14 @@ function inicializarHistorialDesdeSocket(matches, liveMatch) {
         }
 
         ultimoFinMs = finishedMs;
+    }
+
+    if (liveMatch && ultimoFinMs !== null) {
+        const gap = (liveMatch.started * 1000) - ultimoFinMs;
+        if (gap > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
+            wins = 0;
+            losses = 0; // corta la racha
+        }
     }
 
     actualizarMarcador();
@@ -368,7 +383,7 @@ function animarContador(el) {
 function limpiarUI() {
     const matchInfoEl = document.getElementById("matchInfo");
     if (matchInfoEl) matchInfoEl.classList.add("hidden"); // Oculta toda la sección
-    
+
     // Resetear texto de partida y jugadores
     if (matchTitleEl) matchTitleEl.textContent = "⚔️ Esperando partida...";
     if (matchPlayersEl) matchPlayersEl.textContent = "-";
@@ -388,6 +403,18 @@ function limpiarUI() {
 
     // Si es horizontal, ocultar spans de civ y ELO que CSS oculta
     if (overlayStyle === 'horizontal') {
+        const playerCivImg = document.getElementById("playerCivImg");
+        const opponentCivImg = document.getElementById("opponentCivImg");
+        const playerCivText = document.getElementById("playerCivText");
+        const opponentCivText = document.getElementById("opponentCivText");
+        if (playerCivImg) playerCivImg.src = "";
+        if (playerCivText) playerCivText.textContent = "-";
+        if (opponentCivImg) opponentCivImg.src = "";
+        if (opponentCivText) opponentCivText.textContent = "-";
+        if (playerCivImg) playerCivImg.style.display = "none";
+        if (playerCivText) playerCivText.style.display = "none";
+        if (opponentCivImg) opponentCivImg.style.display = "none";
+        if (opponentCivText) opponentCivText.style.display = "none";
         if (matchElosEl) matchElosEl.style.display = "none";
         const civSpans = document.querySelectorAll("#matchCivs span");
         civSpans.forEach(span => span.style.display = "none");
@@ -402,29 +429,74 @@ function limpiarUI() {
 function animarInicioPartida() {
     if (!mainOverlayEl) return;
 
+    // 1️⃣ Forzar estado inicial invisible y escalado
     mainOverlayEl.style.opacity = 0;
-    mainOverlayEl.style.transform = "scale(0.8)";
-    mainOverlayEl.style.transition = "all 0.5s ease-out";
+    mainOverlayEl.style.transform = "scale(1.5)";
+    mainOverlayEl.style.transition = "all 1s ease-out";
 
-    requestAnimationFrame(() => {
+    // 2️⃣ Asegurar que el navegador registre los estilos iniciales
+    setTimeout(() => {
         mainOverlayEl.style.opacity = 1;
         mainOverlayEl.style.transform = "scale(1)";
-    });
+    }, 50); // 50ms es suficiente
 }
 
 function animarFinPartida(resultado) {
-    const el = resultado ? winsEl : lossesEl;
-    if (!el) return;
+    const statusEl = document.getElementById("status");
+    const scoreboardEl = document.querySelector(".scoreboard");
 
-    el.style.transition = "all 0.6s ease";
-    el.style.transform = "scale(1.5)";
-    el.style.color = resultado ? "#FFD700" : "#FF4500"; // dorado vs rojo llamativo
+    if (!statusEl || !scoreboardEl) return;
+
+    // Cambiar el texto del status al resultado
+    statusEl.textContent = resultado ? "Victoria 🎉" : "Derrota ❌";
+
+    // Animación de status (brillo de color)
+    statusEl.style.transition = "color 5s ease, text-shadow 5s ease";
+    statusEl.style.color = resultado ? "gold" : "red";
+    statusEl.style.textShadow = resultado
+        ? "0 0 20px gold"
+        : "0 0 20px red";
 
     setTimeout(() => {
-        el.style.transform = "scale(1)";
-        el.style.color = resultado ? "var(--success-color)" : "var(--failure-color)";
-    }, 600);
+        statusEl.style.color = "";
+        statusEl.style.textShadow = "none";
+    }, 2000);
+
+    // Animación de scoreboard (zoom + resplandor)
+    scoreboardEl.style.transition = "transform 5s ease, box-shadow 5s ease";
+    scoreboardEl.style.transform = "scale(1.2)";
+    scoreboardEl.style.boxShadow = resultado
+        ? "0 0 25px gold"
+        : "0 0 25px red";
+
+    setTimeout(() => {
+        scoreboardEl.style.transform = "scale(1)";
+        scoreboardEl.style.boxShadow = "none";
+    }, 800);
 }
+
+
+
+
+function animarFinPartidaGlobal(resultado) {
+    if (!mainOverlayEl) return;
+
+    // Estado inicial
+    mainOverlayEl.style.transition = "all 2s ease";
+    mainOverlayEl.style.transform = "scale(1.1)";
+    mainOverlayEl.style.opacity = 0.7;
+    mainOverlayEl.style.boxShadow = resultado
+        ? "0 0 20px 10px gold"
+        : "0 0 20px 10px red";
+
+    // Esperar al siguiente frame para resetear
+    setTimeout(() => {
+        mainOverlayEl.style.transform = "scale(1)";
+        mainOverlayEl.style.opacity = 1;
+        mainOverlayEl.style.boxShadow = "none";
+    }, 50);
+}
+
 
 
 function getCivIconUrl(civilizationName) {
