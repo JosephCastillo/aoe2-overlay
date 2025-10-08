@@ -60,6 +60,7 @@ body {
     left: 20px;
     height: 50px;
 }
+
 .style-vertical {
     width: 190px;
     background: var(--overlay-bg);
@@ -275,7 +276,7 @@ body {
     text-overflow: ellipsis;
     max-width: 250px;
     padding: 3px 8px;
-    border-right: 1px  solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* 1.2 Civilizaciones y VS */
@@ -288,7 +289,7 @@ body {
     padding: 0;
     gap: 8px;
     padding: 3px 8px;
-    border-right: 1px  solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .style-horizontal #matchCivs>span:not(.civ) {
@@ -315,8 +316,54 @@ body {
     align-items: center;
     gap: 6px;
     padding: 3px 8px;
-    border-right: 1px  solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    max-width: 320px;
+    /* Ajusta según el espacio que tengas */
+    white-space: nowrap;
 }
+
+.style-horizontal #matchPlayers .scroll-text {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scroll-left 12s linear infinite;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Efecto rebote solo cuando hay overflow */
+/* efecto rebote (bounce) */
+.scroll-bounce {
+    display: inline-block;
+    white-space: nowrap;
+    animation-name: bounce;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    /* duration se puede ajustar desde JS con style.animationDuration */
+    animation-duration: 6s;
+}
+
+/* keyframes (usa la variable --container-width que le ponemos por JS) */
+@keyframes bounce {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(calc(-100% + var(--container-width)));
+    }
+}
+
+
 
 .style-horizontal #matchElos {
     display: flex;
@@ -327,6 +374,7 @@ body {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 /* Estado de Conexión/Partida (Sección Central) */
 .style-horizontal #status {
     /* CLAVE: Resetea margin vertical y asegura la alineación */
@@ -385,4 +433,3 @@ body {
 .style-horizontal .rated {
     display: inline-block;
 }
-

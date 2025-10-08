@@ -173,15 +173,45 @@ function iniciarPartidaEnVivo(match) {
     if (matchTitleEl) matchTitleEl.textContent = `⚔️ ${match.leaderboardName || 'Ladder'} on ${match.rms || 'Mapa Desconocido'}`;
 
     // Jugadores + banderas
-    if (matchPlayersEl) matchPlayersEl.innerHTML = `
-        <div class="player-line">
-            <span class="fi fi-${mainPlayer.country}"></span> ${mainPlayer.name}
-        </div>
-        <div class="vs-line">VS</div>
-        <div class="player-line">
-            ${opponent ? `<span class="fi fi-${opponent.country}"></span> ${opponent.name}` : "-"}
+    if (overlayStyle === "horizontal") {
+    // Crear el contenedor SIN clase de animación por defecto
+    matchPlayersEl.innerHTML = `
+        <div id="scrollText">
+            <span class="fi fi-${mainPlayer.country}"></span>&nbsp;${mainPlayer.name}
+            &nbsp;&nbsp;<span class="vs-line">VS</span>&nbsp;&nbsp;
+            ${opponent ? `<span class="fi fi-${opponent.country}"></span>&nbsp;${opponent.name}` : "-"}
         </div>
     `;
+
+    // Medir *después* de que el navegador haya pintado para obtener scrollWidth correcto
+    requestAnimationFrame(() => {
+        const scrollTextEl = document.getElementById("scrollText");
+        if (!scrollTextEl) return;
+
+        const containerWidth = matchPlayersEl.clientWidth;   // ancho visible
+        const contentWidth = scrollTextEl.scrollWidth;       // ancho del texto completo
+
+        // Si el contenido sobresale -> aplicar efecto rebote (bounce)
+        if (contentWidth > containerWidth + 2) { // +2 px margen de seguridad
+            // quitar cualquier clase de marquee y usar bounce
+            scrollTextEl.classList.remove("scroll-text");
+            scrollTextEl.classList.add("scroll-bounce");
+
+            // pasar variable para el keyframe (usada en calc())
+            scrollTextEl.style.setProperty("--container-width", containerWidth + "px");
+
+            // opcional: ajustar duración según overflow
+            const ratio = contentWidth / containerWidth;
+            const duration = Math.max(4, Math.min(10, Math.ceil(ratio * 3))); // entre 4s y 10s
+            scrollTextEl.style.animationDuration = duration + "s";
+        } else {
+            // No hay overflow: asegurar que no tenga animación
+            scrollTextEl.classList.remove("scroll-bounce", "scroll-text");
+            scrollTextEl.style.removeProperty("--container-width");
+            scrollTextEl.style.animation = "none";
+        }
+    });
+}
 
     // ELO
     const playerRating = mainPlayer.rating || "?";
