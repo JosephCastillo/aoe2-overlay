@@ -2,7 +2,7 @@
 /* BASE GLOBAL Y VARIABLES */
 /* ------------------------------------------------------------------- */
 :root {
-    --overlay-bg: rgba(0, 0, 0, 0.7);
+    --overlay-bg: rgba(0, 0, 0, 0.85);
     --main-text-color: #ece8e8;
     --highlight-color: #cccbcb;
     --font-family: 'Arial', sans-serif;
@@ -228,7 +228,7 @@ body {
     /* CLAVE: Centrado vertical de la barra */
     justify-content: space-between;
 
-    background-color: rgba(0, 0, 0, 0.70);
+    background-color: rgba(0, 0, 0, 0.85);
     border-top: 3px solid rgba(231, 190, 7, 0.918);
     border-radius: var(--border-radius);
 
