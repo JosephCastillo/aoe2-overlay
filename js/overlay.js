@@ -303,97 +303,56 @@ function finalizarPartida(match) {
     }, 4000);
 
 }
-
 // -------------------------------------------------------------
-// LÓGICA DE RACHA DE 2 HORAS (PAUSA ENTRE PARTIDAS) ROBUSTA
+// LÓGICA DE RACHA DE 2 HORAS (PAUSA ENTRE PARTIDAS)
 // -------------------------------------------------------------
-function inicializarHistorialDesdeSocket(matches = [], liveMatch) {
+function inicializarHistorialDesdeSocket(matches, liveMatch) {
     wins = 0;
     losses = 0;
 
-    if (!Array.isArray(matches) || matches.length === 0) {
-        actualizarMarcador();
-        return null;
-    }
-
-    // Construimos matches con tiempo de finalización calculado
-    const enriched = matches
-        .map(m => {
-            if (!m.started || !m.duration) return null;
-            const startedMs = m.started * 1000;
-            const finishedMs = startedMs + (m.duration * 1000);
-            return { ...m, startedMs, finishedMs };
-        })
-        .filter(m => m && m.status === "complete" && !isNaN(m.finishedMs));
-
-    if (enriched.length === 0) {
-        actualizarMarcador();
-        return null;
-    }
-
-    // ✅ Ordenar por tiempo de finalización ASC (más viejo primero)
-    const sorted = enriched.sort((a, b) => a.finishedMs - b.finishedMs);
-
     let ultimoFinMs = null;
-    let foundAny = false;
 
-    for (const match of sorted) {
-        const { id, startedMs, finishedMs } = match;
+    // Recorremos el historial del más reciente al más antiguo
+    for (const match of matches) {
 
-        const resultado = getPlayerResult(match, profileId);
-        console.log(
-            `📊 Match ${id} | started=${match.started} | duration=${match.duration} | resultado=${resultado} | startedMs=${startedMs} | finishedMs=${finishedMs} | ultimoFinMs=${ultimoFinMs}`
-        );
+        if (match.status !== "complete" || !match.started || !match.duration) continue;
 
-        if (resultado === null) {
-            console.warn(`⚠️ Jugador no participó en partida ${id}`);
-            continue;
-        }
+        // Conversión de segundos a milisegundos (UNIX)
+        const finishedMs = (match.started + match.duration) * 1000;
+        const startedMs = match.started * 1000;
 
+        // LÓGICA DE CORTE DE SESIÓN DE 2 HORAS (Pausa entre el final de la anterior y el inicio de esta)
         if (ultimoFinMs !== null) {
-            // ✅ Gap real: inicio de la partida actual - fin de la anterior
-            let gap = startedMs - ultimoFinMs;
+            const tiempoDePausa = Math.abs(startedMs - ultimoFinMs);
 
-            if (gap < 0) {
-                console.warn(`⚠️ Gap negativo detectado en partida ${id}, normalizando a 0`);
-                gap = 0;
-            }
-
-            console.log(`⏱️ Gap entre partidas: ${gap}ms`);
-
-            if (gap > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
-                console.log("⏸️ Racha cortada: gap mayor a 2h");
-                break;
+            if (tiempoDePausa > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
+                break; // Corta la racha
             }
         }
 
-        // Contar resultado
-        if (resultado === true) wins++;
-        else if (resultado === false) losses++;
+        // CLAVE: Obtener resultado usando la función robusta
+        const resultado = getPlayerResult(match, profileId);
 
-        foundAny = true;
+        if (resultado === true) {
+            wins++;
+        } else if (resultado === false) {
+            losses++;
+        }
+
         ultimoFinMs = finishedMs;
     }
 
-    // Caso especial: partida en curso
-    if (liveMatch && liveMatch.started) {
-        const startedMs = liveMatch.started * 1000;
-        if (ultimoFinMs !== null) {
-            let gapLive = startedMs - ultimoFinMs;
-            if (gapLive < 0) gapLive = 0;
-
-            console.log(`🟢 Partida en vivo: gap con la última = ${gapLive}ms`);
-
-            /*if (gapLive > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
-                console.log(`⏸️ Racha cortada por partida en vivo`);
-                wins = 0;
-                losses = 0;
-            }*/
-        }
+    if (liveMatch && ultimoFinMs !== null) {
+    let gap = (liveMatch.started * 1000) - ultimoFinMs;
+    if (gap < 0) gap = 0; // normalizamos
+    if (gap > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
+        wins = 0;
+        losses = 0; // corta la racha
     }
+}
+
 
     actualizarMarcador();
-    return foundAny ? ultimoFinMs : null;
 }
 
 
