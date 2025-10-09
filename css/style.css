@@ -353,7 +353,7 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 3px 8px;
+    padding: 3px 3px;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     max-width: 320px;
@@ -393,11 +393,11 @@ body {
 /* keyframes (usa la variable --container-width que le ponemos por JS) */
 @keyframes bounce {
     0% {
-        transform: translateX(0);
+        transform: translateX(15px);
     }
 
     100% {
-        transform: translateX(calc(-100% + var(--container-width)));
+        transform: translateX(calc(-100% + var(--container-width) - 10px ));
     }
 }
 
