@@ -132,11 +132,27 @@ function handleSocketMessage(msg) {
             limpiarUI();
 
             if (statusEl) {
-                if (wins + losses > 0) {
-                    statusEl.textContent = `⌛ En espera de la próxima partida... (${wins}W - ${losses}L)`;
-                } else {
-                    statusEl.textContent = "⌛ En espera de la próxima partida...";
+                // Nombre y ELO actual
+                let playerName = "Jugador";
+                let currentElo = "?";
+
+                if (msg.data.players) {
+                    // Caso live match
+                    const mainPlayer = msg.data.players.find(p => p.id === profileId);
+                    if (mainPlayer) playerName = mainPlayer.name;
+                } else if (msg.data.player) {
+                    // Caso sin partida en curso
+                    playerName = msg.data.player.name;
                 }
+
+                if (msg.data.ladders) {
+                    const ladder1v1 = msg.data.ladders.find(l => l.name === "1v1 Random Map");
+                    if (ladder1v1) currentElo = ladder1v1.current;
+                }
+
+                // Actualizamos el status
+                statusEl.innerHTML = `⌛ En espera de la próxima partida... (${wins}W - ${losses}L)  <span class="enEspera">${playerName}  - Current Elo: ${currentElo}</span>`;
+                console.log(losses + " " + playerName + " " + currentElo);
             }
         }
 
@@ -329,13 +345,13 @@ function inicializarHistorialDesdeSocket(matches, liveMatch) {
     }
 
     if (liveMatch && ultimoFinMs !== null) {
-    let gap = (liveMatch.started * 1000) - ultimoFinMs;
-    if (gap < 0) gap = 0; // normalizamos
-    if (gap > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
-        wins = 0;
-        losses = 0; // corta la racha
+        let gap = (liveMatch.started * 1000) - ultimoFinMs;
+        if (gap < 0) gap = 0; // normalizamos
+        if (gap > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
+            wins = 0;
+            losses = 0; // corta la racha
+        }
     }
-}
 
 
     actualizarMarcador();

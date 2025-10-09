@@ -48,6 +48,8 @@ body {
     display: none !important;
 }
 
+
+
 /* ------------------------------------------------------------------- */
 /* 1. ESTILO VERTICAL (TU VERSIÓN ORIGINAL DE 190PX) */
 /* ------------------------------------------------------------------- */
@@ -74,6 +76,25 @@ body {
     height: auto;
     font-size: 1.5em;
 }
+
+.style-vertical .enEspera {
+    background-color: rgba(94, 94, 94, 0.253);
+    border-radius: 3px;
+    display: block;
+    margin: 8px 0;
+    padding: 4px 0;
+    color: #cccccc; /* naranja principal */
+    font-family: 'Arial', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    font-size: 1.1em;
+    
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    border-top: 1px solid rgba(85, 85, 85, 0.4);
+    border-bottom: 1px solid rgba(143, 143, 143, 0.4);
+    transition: all 0.3s ease;
+}
+
+
 
 /* Contenedor de Información de Partida */
 .style-vertical #matchInfo {
@@ -293,6 +314,22 @@ body {
     border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.style-horizontal .enEspera {
+    background-color: rgba(94, 94, 94, 0.253);
+    border-radius: 3px;
+    display: inline-block;
+    margin: 8px 0;
+    padding: 2px 5px;
+    color: #d3d3d3; /* naranja principal */
+    font-family: 'Arial', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    font-size: 1.1em;
+
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    border-left: 1px solid rgba(77, 77, 77, 0.4);
+    border-right: 1px solid rgba(77, 77, 77, 0.4);
+    transition: all 0.3s ease;
+}
 .style-horizontal #matchCivs>span:not(.civ) {
     line-height: 1.2;
 }
