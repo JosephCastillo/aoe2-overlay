@@ -170,7 +170,7 @@ function iniciarPartidaEnVivo(match) {
     const opponent = findOpponent(match);
 
     // Título
-    if (matchTitleEl) matchTitleEl.textContent = `⚔️ ${match.leaderboardName || 'Ladder'} on ${match.rms || 'Mapa Desconocido'}`;
+    if (matchTitleEl) matchTitleEl.textContent = `⚔️ ${match.diplomacy || 'Ladder'} on ${match.rms || 'Mapa Desconocido'}`;
 
     // Jugadores + banderas
     if (overlayStyle === "horizontal") {
@@ -329,12 +329,14 @@ function inicializarHistorialDesdeSocket(matches, liveMatch) {
     }
 
     if (liveMatch && ultimoFinMs !== null) {
-        const gap = (liveMatch.started * 1000) - ultimoFinMs;
-        if (gap > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
-            wins = 0;
-            losses = 0; // corta la racha
-        }
+    let gap = (liveMatch.started * 1000) - ultimoFinMs;
+    if (gap < 0) gap = 0; // normalizamos
+    if (gap > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
+        wins = 0;
+        losses = 0; // corta la racha
     }
+}
+
 
     actualizarMarcador();
 }
