@@ -345,10 +345,6 @@ function inicializarHistorialDesdeSocket(matches, liveMatch) {
     if (liveMatch && ultimoFinMs !== null) {
     let gap = (liveMatch.started * 1000) - ultimoFinMs;
     if (gap < 0) gap = 0; // normalizamos
-    if (gap > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
-        wins = 0;
-        losses = 0; // corta la racha
-    }
 }
 
 
