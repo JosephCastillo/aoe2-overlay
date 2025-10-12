@@ -227,14 +227,39 @@ function iniciarPartidaEnVivo(match) {
         });
     } else if (overlayStyle === "vertical") {
         matchPlayersEl.innerHTML = `
-        <div class="player-line">
-            <span class="fi fi-${mainPlayer.country}"></span> ${mainPlayer.name}
-        </div>
-        <div class="vs-line">VS</div>
-        <div class="player-line">
-            ${opponent ? `<span class="fi fi-${opponent.country}"></span> ${opponent.name}` : "-"}
+        <div id="scrollTextVertical">
+            <div class="player">
+                <span class="fi fi-${mainPlayer.country}"></span>
+                <span>${mainPlayer.name}</span>
+            </div>
+            <span class="vs-line">vs</span>
+            <div class="player">
+                ${opponent ? `<span class="fi fi-${opponent.country}"></span><span>${opponent.name}</span>` : "-"}
+            </div>
         </div>
     `;
+
+        // Aplicar animación bounce si hay overflow
+        requestAnimationFrame(() => {
+            const scrollTextEl = document.getElementById("scrollTextVertical");
+            if (!scrollTextEl) return;
+
+            const containerWidth = matchPlayersEl.clientWidth;
+            const contentWidth = scrollTextEl.scrollWidth;
+
+            if (contentWidth > containerWidth + 2) {
+                scrollTextEl.classList.add("scroll-bounce");
+                scrollTextEl.style.setProperty("--container-width", containerWidth + "px");
+
+                const ratio = contentWidth / containerWidth;
+                const duration = Math.max(4, Math.min(10, Math.ceil(ratio * 3)));
+                scrollTextEl.style.animationDuration = duration + "s";
+            } else {
+                scrollTextEl.classList.remove("scroll-bounce");
+                scrollTextEl.style.removeProperty("--container-width");
+                scrollTextEl.style.animation = "none";
+            }
+        });
     }
 
     // ELO
