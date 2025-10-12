@@ -212,7 +212,7 @@ function iniciarPartidaEnVivo(match) {
                 scrollTextEl.classList.add("scroll-bounce");
 
                 // pasar variable para el keyframe (usada en calc())
-                scrollTextEl.style.setProperty("--container-width", containerWidth + "px");
+                scrollTextEl.style.setProperty("--container-width", containerWidth  - 20 + "px");
 
                 // opcional: ajustar duración según overflow
                 const ratio = contentWidth / containerWidth;
@@ -247,15 +247,20 @@ function iniciarPartidaEnVivo(match) {
             const containerWidth = matchPlayersEl.clientWidth;
             const contentWidth = scrollTextEl.scrollWidth;
 
-            if (contentWidth > containerWidth + 2) {
+             // Si el contenido sobresale -> aplicar efecto rebote (bounce)
+            if (contentWidth > containerWidth + 2) { // +2 px margen de seguridad
                 scrollTextEl.classList.add("scroll-bounce");
-                scrollTextEl.style.setProperty("--container-width", containerWidth + "px");
 
+                // pasar variable para el keyframe (usada en calc())
+                scrollTextEl.style.setProperty("--container-width", containerWidth - 20 +"px");
+
+                // opcional: ajustar duración según overflow
                 const ratio = contentWidth / containerWidth;
-                const duration = Math.max(4, Math.min(10, Math.ceil(ratio * 3)));
+                const duration = Math.max(4, Math.min(10, Math.ceil(ratio * 3))); // entre 4s y 10s
                 scrollTextEl.style.animationDuration = duration + "s";
             } else {
-                scrollTextEl.classList.remove("scroll-bounce");
+                // No hay overflow: asegurar que no tenga animación
+                scrollTextEl.classList.remove("scroll-bounce", "scroll-text");
                 scrollTextEl.style.removeProperty("--container-width");
                 scrollTextEl.style.animation = "none";
             }

@@ -48,7 +48,7 @@ body {
     display: none !important;
 }
 
-span{
+span {
     margin-left: 3px;
 }
 
@@ -104,6 +104,9 @@ span{
     /*display: flex;*/
     flex-direction: column;
     gap: 0;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Título de la partida */
@@ -120,19 +123,25 @@ span{
 
 /* Contenedor principal */
 .style-vertical #matchPlayers {
-    display: flex;
-    justify-content: center;
+    margin: 0;
+    line-height: 1.2;
     align-items: center;
-    font-size: .8em;
+    justify-content: center;
+    font-size: .7em;
     font-weight: bold;
     color: var(--main-text-color);
-    margin: 8px 0 0 0;
-    padding: 3px 0 3px 0;
-    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     max-width: 250px;
-    width: 250px;
-    overflow: hidden;  /* clave para el bounce */
+    /* Aumentamos el espacio para los nombres */
+    display: flex;
+    
+    padding: 3px 3px;
+
     position: relative;
+    /* Ajusta según el espacio que tengas */
+    white-space: nowrap;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -147,11 +156,17 @@ span{
     will-change: transform;
 }
 
+/* Cuando hay animación bounce */
+#scrollTextVertical.scroll-bounce {
+    justify-content: flex-start; /* para que arranque desde el borde izquierdo */
+}
+
 /* Jugador izquierdo */
 .style-vertical .player.left {
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* se pega al VS */
+    justify-content: flex-end;
+    /* se pega al VS */
     gap: 5px;
     flex: 1;
 }
@@ -160,7 +175,8 @@ span{
 .style-vertical .player.right {
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* se pega al VS */
+    justify-content: flex-start;
+    /* se pega al VS */
     gap: 5px;
     flex: 1;
 }
@@ -170,7 +186,8 @@ span{
     font-weight: bold;
     font-size: 1.1em;
     margin: 0 6px;
-    flex: 0; /* no crece */
+    flex: 0;
+    /* no crece */
 }
 
 /* Civilizaciones y VS */
@@ -302,7 +319,7 @@ span{
     /* Suficiente espacio en los bordes laterales */
 
     width: max-content;
-    max-width: 1500px;
+    
 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     font-size: 1.5em;
@@ -332,16 +349,17 @@ span{
     margin: 0;
     border: none;
     line-height: 1.2;
-
-    font-size: 1em;
+    text-align: center;
+    font-size: .9em;
     font-weight: bold;
     color: var(--highlight-color);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 250px;
+    max-width: 240px;
     padding: 3px 8px;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
+    width: 230px;
 }
 
 /* 1.2 Civilizaciones y VS */
@@ -383,7 +401,7 @@ span{
 .style-horizontal #matchPlayers {
     /* CLAVE: Resetea y alinea el texto del jugador */
     margin: 0;
-    padding: 0;
+    padding-left: 50px;
     line-height: 1.2;
 
     font-size: 1em;
@@ -430,10 +448,11 @@ span{
 /* La animación usa la variable --container-width */
 @keyframes bounce-scroll {
     from {
-        transform: translateX(15px);
+        transform: translateX(0);
     }
+
     to {
-        transform: translateX(calc(var(--container-width) - 100%  - 10px) );
+        transform: translateX(calc(var(--container-width) - 100%));
     }
 }
 
