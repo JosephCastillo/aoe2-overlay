@@ -196,6 +196,11 @@ body {
     line-height: 1;
 }
 
+.style-vertical .EsperaPartida{
+    display: block;
+    margin: 5px 0 0 15px;
+}
+
 .style-vertical .scoreboard {
     font-size: .8em;
     display: flex;

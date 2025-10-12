@@ -151,7 +151,7 @@ function handleSocketMessage(msg) {
                 }
 
                 // Actualizamos el status
-                statusEl.innerHTML = `⌛ En espera de la próxima partida... (${wins}W - ${losses}L)  <span class="enEspera">${playerName}  - Current Elo: ${currentElo}</span>`;
+                statusEl.innerHTML = `<span class="EsperaPartida">⌛ En espera de la próxima partida...</span>  <span class="enEspera">${playerName}  - Current Elo: ${currentElo}</span>`;
                 console.log(losses + " " + playerName + " " + currentElo);
             }
         }
