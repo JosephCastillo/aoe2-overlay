@@ -106,7 +106,6 @@ span {
     gap: 0;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Título de la partida */
@@ -158,7 +157,8 @@ span {
 
 /* Cuando hay animación bounce */
 #scrollTextVertical.scroll-bounce {
-    justify-content: flex-start; /* para que arranque desde el borde izquierdo */
+    justify-content: flex-start; /* arranca desde la izquierda */
+    animation: bounce-scroll linear infinite alternate;
 }
 
 /* Jugador izquierdo */
@@ -436,7 +436,7 @@ span {
     }
 
     100% {
-        transform: translateX(-100%);
+        transform: translateX(-100% );
     }
 }
 
@@ -445,14 +445,12 @@ span {
     animation: bounce-scroll linear infinite alternate;
 }
 
-/* La animación usa la variable --container-width */
 @keyframes bounce-scroll {
     from {
         transform: translateX(0);
     }
-
     to {
-        transform: translateX(calc(var(--container-width) - 100%));
+        transform: translateX(var(--scroll-diff));
     }
 }
 

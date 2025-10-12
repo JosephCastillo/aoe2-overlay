@@ -204,6 +204,8 @@ function iniciarPartidaEnVivo(match) {
 
             const containerWidth = matchPlayersEl.clientWidth;   // ancho visible
             const contentWidth = scrollTextEl.scrollWidth;       // ancho del texto completo
+            const diff = containerWidth - contentWidth;
+            const extraRight = Math.max(20, Math.abs(diff) * 0.1);
 
             // Si el contenido sobresale -> aplicar efecto rebote (bounce)
             if (contentWidth > containerWidth + 2) { // +2 px margen de seguridad
@@ -212,7 +214,7 @@ function iniciarPartidaEnVivo(match) {
                 scrollTextEl.classList.add("scroll-bounce");
 
                 // pasar variable para el keyframe (usada en calc())
-                scrollTextEl.style.setProperty("--container-width", containerWidth  - 20 + "px");
+                scrollTextEl.style.setProperty("--scroll-diff", (diff - extraRight) + "px");
 
                 // opcional: ajustar duración según overflow
                 const ratio = contentWidth / containerWidth;
@@ -246,22 +248,25 @@ function iniciarPartidaEnVivo(match) {
 
             const containerWidth = matchPlayersEl.clientWidth;
             const contentWidth = scrollTextEl.scrollWidth;
+            console.log("Container width:", containerWidth, "Content width:", contentWidth);
+            const diff = (containerWidth - contentWidth) * 2;
+            const extraRight = Math.max(20, Math.abs(diff) * 0.1);
 
-             // Si el contenido sobresale -> aplicar efecto rebote (bounce)
-            if (contentWidth > containerWidth + 2) { // +2 px margen de seguridad
+
+            if (contentWidth > containerWidth + 2) {
                 scrollTextEl.classList.add("scroll-bounce");
 
-                // pasar variable para el keyframe (usada en calc())
-                scrollTextEl.style.setProperty("--container-width", containerWidth - 20 +"px");
+                // diferencia real (será negativa si el texto es más ancho)
 
-                // opcional: ajustar duración según overflow
+                scrollTextEl.style.setProperty("--scroll-diff", (diff - extraRight) + "px");
+
+                // ajustar velocidad según proporción
                 const ratio = contentWidth / containerWidth;
-                const duration = Math.max(4, Math.min(10, Math.ceil(ratio * 3))); // entre 4s y 10s
+                const duration = Math.max(4, Math.min(12, Math.ceil(ratio * 3)));
                 scrollTextEl.style.animationDuration = duration + "s";
             } else {
-                // No hay overflow: asegurar que no tenga animación
-                scrollTextEl.classList.remove("scroll-bounce", "scroll-text");
-                scrollTextEl.style.removeProperty("--container-width");
+                scrollTextEl.classList.remove("scroll-bounce");
+                scrollTextEl.style.removeProperty("--scroll-diff");
                 scrollTextEl.style.animation = "none";
             }
         });
