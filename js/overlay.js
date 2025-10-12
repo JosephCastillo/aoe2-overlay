@@ -314,7 +314,6 @@ function inicializarHistorialDesdeSocket(matches, liveMatch) {
 
     // Recorremos el historial del más reciente al más antiguo
     for (const match of matches) {
-
         if (match.status !== "complete" || !match.started || !match.duration) continue;
 
         // Conversión de segundos a milisegundos (UNIX)
@@ -324,7 +323,6 @@ function inicializarHistorialDesdeSocket(matches, liveMatch) {
         // LÓGICA DE CORTE DE SESIÓN DE 2 HORAS (Pausa entre el final de la anterior y el inicio de esta)
         if (ultimoFinMs !== null) {
             const tiempoDePausa = Math.abs(startedMs - ultimoFinMs);
-
             if (tiempoDePausa > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
                 break; // Corta la racha
             }
@@ -342,11 +340,19 @@ function inicializarHistorialDesdeSocket(matches, liveMatch) {
         ultimoFinMs = finishedMs;
     }
 
-    if (liveMatch && ultimoFinMs !== null) {
-    let gap = (liveMatch.started * 1000) - ultimoFinMs;
-    if (gap < 0) gap = 0; // normalizamos
-}
+    // 🚨 NUEVO: Si la última partida fue hace más de 2 horas desde ahora, reiniciar racha
+    if (ultimoFinMs !== null) {
+        const ahoraMs = Date.now();
+        if (ahoraMs - ultimoFinMs > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
+            wins = 0;
+            losses = 0;
+        }
+    }
 
+    if (liveMatch && ultimoFinMs !== null) {
+        let gap = (liveMatch.started * 1000) - ultimoFinMs;
+        if (gap < 0) gap = 0; // normalizamos
+    }
 
     actualizarMarcador();
 }
