@@ -338,6 +338,7 @@ function finalizarPartida(match) {
     }, 4000);
 
 }
+
 // -------------------------------------------------------------
 // LÓGICA DE RACHA DE 2 HORAS (PAUSA ENTRE PARTIDAS)
 // -------------------------------------------------------------
@@ -345,20 +346,32 @@ function inicializarHistorialDesdeSocket(matches, liveMatch) {
     wins = 0;
     losses = 0;
 
-    let ultimoFinMs = null;
+    let ultimoFinMs = null; // tu variable actual de racha
+    let ultimaPartidaJugMs = null; // nueva variable para la última partida jugada
 
     // Recorremos el historial del más reciente al más antiguo
     for (const match of matches) {
+
         if (match.status !== "complete" || !match.started || !match.duration) continue;
 
+        // Asegurar que started y duration sean números
+        const started = Number(match.started);
+        const duration = Number(match.duration);
+
         // Conversión de segundos a milisegundos (UNIX)
-        const finishedMs = (match.started + match.duration) * 1000;
-        const startedMs = match.started * 1000;
+        const startedMs = started * 1000;
+        const finishedMs = (started + duration) * 1000;
+
+        // Guardar siempre la fecha de la última partida jugada
+        if (!ultimaPartidaJugMs) {
+            ultimaPartidaJugMs = finishedMs; // solo se asigna la primera vez
+        }
 
         // LÓGICA DE CORTE DE SESIÓN DE 2 HORAS (Pausa entre el final de la anterior y el inicio de esta)
         if (ultimoFinMs !== null) {
             const tiempoDePausa = Math.abs(startedMs - ultimoFinMs);
             if (tiempoDePausa > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
+                console.log("⏲️ Racha cortada por pausa de más de 2 horas entre partidas para mostrar en el contador.");
                 break; // Corta la racha
             }
         }
@@ -375,22 +388,31 @@ function inicializarHistorialDesdeSocket(matches, liveMatch) {
         ultimoFinMs = finishedMs;
     }
 
-    // 🚨 NUEVO: Si la última partida fue hace más de 2 horas desde ahora, reiniciar racha
-    if (ultimoFinMs !== null) {
-        const ahoraMs = Date.now();
-        if (ahoraMs - ultimoFinMs > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
+    console.log("Última partida jugada (ms):", ultimaPartidaJugMs);
+    console.log("Última partida dentro de la racha (ms):", ultimoFinMs);
+
+    // Actualiza el marcador si la ultima partida jugada fue hace más de 2 horas
+    const ahoraMs = Date.now();
+    if (ultimaPartidaJugMs !== null) {
+        const tiempoDesdeUltimaPartida = ahoraMs - ultimaPartidaJugMs;
+        console.log("Tiempo desde última partida jugada (ms):", tiempoDesdeUltimaPartida);
+        if (tiempoDesdeUltimaPartida > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
             wins = 0;
             losses = 0;
+            console.log("⏲️ Racha reiniciada por inactividad de más de 2 horas.");
         }
     }
 
+    // Si hay una partida en vivo, verificar la pausa entre el último fin de racha y el inicio de esta
     if (liveMatch && ultimoFinMs !== null) {
-        let gap = (liveMatch.started * 1000) - ultimoFinMs;
+        let gap = (Number(liveMatch.started) * 1000) - ultimoFinMs;
         if (gap < 0) gap = 0; // normalizamos
+        console.log("Gap con partida en vivo (ms):", gap);
     }
 
     actualizarMarcador();
 }
+
 
 
 // -------------------------------------------------------------
