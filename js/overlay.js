@@ -232,11 +232,11 @@ function iniciarPartidaEnVivo(match) {
         <div id="scrollTextVertical">
             <div class="player">
                 <span class="fi fi-${mainPlayer.country}"></span>
-                <span>${mainPlayer.name}</span>
+                <span class="name">${mainPlayer.name}</span>
             </div>
             <span class="vs-line">vs</span>
             <div class="player">
-                ${opponent ? `<span class="fi fi-${opponent.country}"></span><span>${opponent.name}</span>` : "-"}
+                ${opponent ? `<span class="fi fi-${opponent.country}"></span><span class="name">${opponent.name}</span>` : "-"}
             </div>
         </div>
     `;

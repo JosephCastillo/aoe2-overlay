@@ -48,8 +48,9 @@ body {
     display: none !important;
 }
 
-span {
+.name {
     margin-left: 3px;
+    ;
 }
 
 /* ------------------------------------------------------------------- */
@@ -135,7 +136,7 @@ span {
     max-width: 250px;
     /* Aumentamos el espacio para los nombres */
     display: flex;
-    
+
     padding: 3px 3px;
 
     position: relative;
@@ -157,7 +158,8 @@ span {
 
 /* Cuando hay animación bounce */
 #scrollTextVertical.scroll-bounce {
-    justify-content: flex-start; /* arranca desde la izquierda */
+    justify-content: flex-start;
+    /* arranca desde la izquierda */
     animation: bounce-scroll linear infinite alternate;
 }
 
@@ -239,6 +241,7 @@ span {
     padding: 2px 0;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0;
 }
 
 .style-vertical #matchElos::before {
@@ -246,7 +249,6 @@ span {
     color: rgba(255, 255, 255, 0.7);
     font-weight: normal;
     font-size: 0.85em;
-    margin-right: 4px;
 }
 
 /* Estado de Conexión/Partida */
@@ -319,7 +321,7 @@ span {
     /* Suficiente espacio en los bordes laterales */
 
     width: max-content;
-    
+
 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     font-size: 1.5em;
@@ -436,7 +438,7 @@ span {
     }
 
     100% {
-        transform: translateX(-100% );
+        transform: translateX(-100%);
     }
 }
 
@@ -449,6 +451,7 @@ span {
     from {
         transform: translateX(0);
     }
+
     to {
         transform: translateX(var(--scroll-diff));
     }
