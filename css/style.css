@@ -67,7 +67,7 @@ body {
 }
 
 .style-vertical {
-    width: 250px;
+    width: 255px;
     background: var(--overlay-bg);
     border-top: 3px solid rgba(231, 190, 7, 0.918);
     border-radius: var(--border-radius);
