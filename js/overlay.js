@@ -391,7 +391,24 @@ function inicializarHistorialDesdeSocket(matches, liveMatch) {
     console.log("Última partida jugada (ms):", ultimaPartidaJugMs);
     console.log("Última partida dentro de la racha (ms):", ultimoFinMs);
 
-    
+    // Actualiza el marcador si la ultima partida jugada fue hace más de 2 horas
+    const ahoraMs = Date.now();
+    if (ultimaPartidaJugMs !== null) {
+        const tiempoDesdeUltimaPartida = ahoraMs - ultimaPartidaJugMs;
+        console.log("Tiempo desde última partida jugada (ms):", tiempoDesdeUltimaPartida);
+        if (tiempoDesdeUltimaPartida > TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS) {
+            wins = 0;
+            losses = 0;
+            console.log("⏲️ Racha reiniciada por inactividad de más de 2 horas.");
+        }
+    }
+
+    // Si hay una partida en vivo, verificar la pausa entre el último fin de racha y el inicio de esta
+    if (liveMatch && ultimoFinMs !== null) {
+        let gap = (Number(liveMatch.started) * 1000) - ultimoFinMs;
+        if (gap < 0) gap = 0; // normalizamos
+        console.log("Gap con partida en vivo (ms):", gap);
+    }
 
     actualizarMarcador();
 }
