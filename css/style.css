@@ -2,7 +2,7 @@
 /* BASE GLOBAL Y VARIABLES */
 /* ------------------------------------------------------------------- */
 :root {
-    --overlay-bg: rgba(0, 0, 0, 0.85);
+    --overlay-bg: rgba(0, 0, 0, 0.75);
     --main-text-color: #ece8e8;
     --highlight-color: #cccbcb;
     --font-family: 'Arial', sans-serif;

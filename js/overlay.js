@@ -16,24 +16,9 @@ let partidaActualId = null;
 // Constante para la racha de 2 HORAS
 const TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS = 2 * 60 * 60 * 1000;
 
-// Elementos DOM
 
-const mainOverlayEl = document.getElementById("mainOverlay"); // Referencia al nuevo ID
-const statusEl = document.getElementById("status");
-const winsEl = document.getElementById("wins");
-const lossesEl = document.getElementById("losses");
-
-const matchTitleEl = document.getElementById("matchTitle");
-const matchPlayersEl = document.getElementById("matchPlayers");
-const matchElosEl = document.getElementById("matchElos");
-
-const playerFlagEl = document.getElementById("playerFlag");
-const opponentFlagEl = document.getElementById("opponentFlag");
-
-const playerCivImg = document.getElementById("playerCivImg");
-const opponentCivImg = document.getElementById("opponentCivImg");
-const playerCivText = document.getElementById("playerCivText");
-const opponentCivText = document.getElementById("opponentCivText");
+// Importación de elementos DOM
+import { mainOverlayEl, statusEl, winsEl, lossesEl, matchTitleEl, matchPlayersEl, matchElosEl, playerFlagEl, opponentFlagEl, playerCivImg, opponentCivImg, playerCivText, opponentCivText } from "./domElements.js";
 
 
 // -------------------------------------------------------------
@@ -151,7 +136,7 @@ function handleSocketMessage(msg) {
                 }
 
                 // Actualizamos el status
-                statusEl.innerHTML = `<span class="EsperaPartida">⌛ En espera de la próxima partida...</span>  <span class="enEspera">${playerName}  - Current Elo: ${currentElo}</span>`;
+                statusEl.innerHTML = `<span class="EsperaPartida">⌛ En espera de la próxima partida...</span>  <span class="enEspera">${playerName} &nbsp;<wbr>Current&nbsp;Elo:&nbsp;${currentElo}</span>`;
                 console.log(losses + " " + playerName + " " + currentElo);
             }
         }
