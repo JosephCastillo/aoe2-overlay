@@ -144,6 +144,7 @@ body {
     white-space: nowrap;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    width: 250px;
 }
 
 /* Texto desplazable */
@@ -152,8 +153,10 @@ body {
     align-items: center;
     justify-content: center;
     white-space: nowrap;
-    width: 100%;
+    width: 250px;
     will-change: transform;
+    padding: 3px 3px;
+    margin: 0;
 }
 
 /* Cuando hay animación bounce */

@@ -210,6 +210,7 @@ function iniciarPartidaEnVivo(match) {
                 scrollTextEl.classList.remove("scroll-bounce", "scroll-text");
                 scrollTextEl.style.removeProperty("--container-width");
                 scrollTextEl.style.animation = "none";
+                scrollTextEl.style.width = "auto";
             }
         });
     } else if (overlayStyle === "vertical") {
@@ -238,7 +239,7 @@ function iniciarPartidaEnVivo(match) {
             const extraRight = Math.max(20, Math.abs(diff) * 0.1);
 
 
-            if (contentWidth > containerWidth + 2) {
+            if (contentWidth > containerWidth - 5) {
                 scrollTextEl.classList.add("scroll-bounce");
 
                 // diferencia real (será negativa si el texto es más ancho)
