@@ -13,8 +13,8 @@ let losses = 0;
 let enPartida = false;
 let partidaActualId = null;
 
-// Constante para la racha de 2 HORAS
-const TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS = 2 * 60 * 60 * 1000;
+// Constante para la racha de 3 HORAS
+const TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS = 3 * 60 * 60 * 1000;
 
 
 // Importación de elementos DOM
@@ -177,9 +177,14 @@ function iniciarPartidaEnVivo(match) {
     if (overlayStyle === "horizontal") {
         matchPlayersEl.innerHTML = `
         <div id="scrollText">
-            <span style="color: ${mainPlayer.color_hex};" class="fi fi-${mainPlayer.country}"></span>&nbsp;${mainPlayer.name}
+            <span class="fi fi-${mainPlayer.country}"></span>
+            <span style="color: ${mainPlayer.color_hex};">&nbsp;${mainPlayer.name}</span>
             &nbsp;&nbsp;<span class="vs-line">VS</span>&nbsp;&nbsp;
-            ${opponent ? `<span class="fi fi-${opponent.country}"></span>&nbsp;${opponent.name}` : "-"}
+            ${opponent
+                ? `<span class="fi fi-${opponent.country}"></span>
+                   <span style="color: ${opponent.color_hex};">&nbsp;${opponent.name}</span>`
+                : "-"
+            }
         </div>
     `;
         // Medir *después* de que el navegador haya pintado para obtener scrollWidth correcto
