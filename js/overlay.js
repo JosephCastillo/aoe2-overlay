@@ -177,7 +177,7 @@ function iniciarPartidaEnVivo(match) {
     if (overlayStyle === "horizontal") {
         matchPlayersEl.innerHTML = `
         <div id="scrollText">
-            <span class="fi fi-${mainPlayer.country}"></span>&nbsp;${mainPlayer.name}
+            <span style="color: ${mainPlayer.color_hex};" class="fi fi-${mainPlayer.country}"></span>&nbsp;${mainPlayer.name}
             &nbsp;&nbsp;<span class="vs-line">VS</span>&nbsp;&nbsp;
             ${opponent ? `<span class="fi fi-${opponent.country}"></span>&nbsp;${opponent.name}` : "-"}
         </div>
@@ -218,11 +218,11 @@ function iniciarPartidaEnVivo(match) {
         <div id="scrollTextVertical">
             <div class="player">
                 <span class="fi fi-${mainPlayer.country}"></span>
-                <span class="name">${mainPlayer.name}</span>
+                <span style="color: ${mainPlayer.color_hex};" class="name">${mainPlayer.name}</span>
             </div>
             <span class="vs-line">vs</span>
             <div class="player">
-                ${opponent ? `<span class="fi fi-${opponent.country}"></span><span class="name">${opponent.name}</span>` : "-"}
+                ${opponent ? `<span class="fi fi-${opponent.country}"></span><span style="color: ${opponent.color_hex};" class="name">${opponent.name}</span>` : "-"}
             </div>
         </div>
     `;
