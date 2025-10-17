@@ -13,8 +13,8 @@ let losses = 0;
 let enPartida = false;
 let partidaActualId = null;
 
-// Constante para la racha de 4 HORAS
-const TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS = 4 * 60 * 60 * 1000;
+// Constante para la racha de 8 HORAS
+const TIEMPO_MAXIMO_ENTRE_PARTIDAS_MS = 8 * 60 * 60 * 1000;
 
 
 // Importación de elementos DOM
