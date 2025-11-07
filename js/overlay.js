@@ -576,7 +576,7 @@ function animarFinPartida(resultado) {
     setTimeout(() => {
         scoreboardEl.style.transform = "scale(1)";
         scoreboardEl.style.boxShadow = "none";
-    }, 800);
+    }, 2000);
 }
 
 
