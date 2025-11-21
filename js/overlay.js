@@ -605,10 +605,9 @@ function animarFinPartidaGlobal(resultado) {
 
 function getCivIconUrl(civilizationName) {
     if (!civilizationName) return "";
-
     // Normalizar: pasar a minúsculas y reemplazar espacios por nada
     const fileName = civilizationName.toLowerCase().replace(/\s+/g, "");
-
-    return `https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/master/img/Civs/${fileName}.png`;
+    console.log("Civ icon file name:", fileName);
+    return `https://raw.githubusercontent.com/SiegeEngineers/aoe2techtree/refs/heads/master/img/Civs/${fileName}.png`;
 }
 
