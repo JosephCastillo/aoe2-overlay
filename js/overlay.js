@@ -271,14 +271,23 @@ function iniciarPartidaEnVivo(match) {
     }
 
     // Civilizaciones
-    if (playerCivImg) playerCivImg.src = getCivIconUrl(mainPlayer.civilization) || "";
+    if (playerCivImg) {
+        playerCivImg.style.display = ""; // ✅ Mostrar imagen
+        playerCivImg.src = getCivIconUrl(mainPlayer.civilization) || "";
+    }
     if (playerCivText) playerCivText.textContent = mainPlayer.civilization || "";
 
     if (opponent) {
-        if (opponentCivImg) opponentCivImg.src = getCivIconUrl(opponent.civilization) || "";
+        if (opponentCivImg) {
+            opponentCivImg.style.display = ""; // ✅ Mostrar imagen
+            opponentCivImg.src = getCivIconUrl(opponent.civilization) || "";
+        }
         if (opponentCivText) opponentCivText.textContent = opponent.civilization || "";
     } else {
-        if (opponentCivImg) opponentCivImg.src = "";
+        if (opponentCivImg) {
+            opponentCivImg.style.display = "none"; // ❌ Ocultar si no hay oponente
+            opponentCivImg.src = "";
+        }
         if (opponentCivText) opponentCivText.textContent = "-";
     }
 
